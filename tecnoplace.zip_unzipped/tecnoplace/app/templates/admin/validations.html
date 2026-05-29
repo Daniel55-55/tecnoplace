@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Validaciones pendientes{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin.dashboard') }}" class="link-back">← Volver al panel</a>
+<h1>Validaciones de identidad pendientes</h1>
+<p class="muted">{{ pendientes|length }} solicitud(es) en cola.</p>
+
+{% if pendientes %}
+  <div class="validation-list">
+    {% for v in pendientes %}
+      <article class="validation-card">
+        <header>
+          <div>
+            <h3>{{ v.usuario.nombre }}</h3>
+            <p class="muted">{{ v.usuario.correo }} · Documento: {{ v.usuario.documento or '—' }}</p>
+            <p class="muted small">Solicitado: {{ v.fecha_solicitud.strftime('%d/%m/%Y %H:%M') }}</p>
+          </div>
+        </header>
+
+        <div class="docs-preview">
+          <div>
+            <p class="muted small">Foto del documento</p>
+            <img src="{{ url_for('static', filename=v.foto_documento) }}" alt="Documento">
+          </div>
+          <div>
+            <p class="muted small">Selfie</p>
+            <img src="{{ url_for('static', filename=v.selfie) }}" alt="Selfie">
+          </div>
+        </div>
+
+        <div class="validation-actions">
+          <form method="post" action="{{ url_for('admin.aprobar_validacion', vid=v.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="text" name="observaciones" placeholder="Observaciones (opcional)">
+            <button type="submit" class="btn btn-primary">✓ Aprobar</button>
+          </form>
+          <form method="post" action="{{ url_for('admin.rechazar_validacion', vid=v.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="text" name="observaciones" placeholder="Motivo del rechazo">
+            <button type="submit" class="btn btn-danger">✗ Rechazar</button>
+          </form>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state-soft">
+    <p>🎉 No hay validaciones pendientes en este momento.</p>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-content">
+    <span class="badge">✓ Verificación de identidad obligatoria</span>
+    <h1>Compra y vende tecnología <span class="hl">con confianza</span></h1>
+    <p class="lead">
+      TecnoPlace es el primer marketplace de dispositivos tecnológicos donde <strong>cada usuario es verificado</strong>
+      mediante documento y selfie antes de poder publicar. Sin perfiles falsos. Sin estafas.
+    </p>
+    <div class="hero-actions">
+      <a href="{{ url_for('main.buscar') }}" class="btn btn-primary btn-lg">Ver catálogo</a>
+      {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('auth.registro') }}" class="btn btn-outline btn-lg">Crear cuenta</a>
+      {% else %}
+        <a href="{{ url_for('products.crear') }}" class="btn btn-outline btn-lg">Publicar producto</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="hero-visual" aria-hidden="true">
+    <div class="hero-card hero-card-1">📱<span>Celular verificado</span></div>
+    <div class="hero-card hero-card-2">💻<span>Computador validado</span></div>
+    <div class="hero-card hero-card-3">⌚<span>Reloj inteligente</span></div>
+  </div>
+</section>
+
+<section class="categorias-hero">
+  <h2>Explora por categoría</h2>
+  <div class="cat-grid">
+    {% set iconos = {'Televisores':'📺','Celulares':'📱','Computadores':'💻','Relojes Inteligentes':'⌚','Audífonos':'🎧'} %}
+    {% for c in all_categorias %}
+      <a href="{{ url_for('main.buscar') }}?categoria={{ c.id }}" class="cat-card">
+        <span class="cat-icon">{{ iconos.get(c.nombre, '🔧') }}</span>
+        <span>{{ c.nombre }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="features">
+  <h2>¿Por qué elegir TecnoPlace?</h2>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-icon">🛡️</div>
+      <h3>Identidad verificada</h3>
+      <p>Cada vendedor pasa por validación de cédula y selfie antes de publicar.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔐</div>
+      <h3>Contraseñas seguras</h3>
+      <p>Cifrado bcrypt y protección CSRF en todos los formularios.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <h3>Búsqueda instantánea</h3>
+      <p>Filtrado por categoría, precio y estado con respuesta menor a 1 segundo.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📐</div>
+      <h3>Arquitectura modular</h3>
+      <p>Patrón MVC con capas separadas — presentación, controladores, servicios, persistencia.</p>
+    </div>
+  </div>
+</section>
+
+{% if productos %}
+<section class="ultimos">
+  <div class="section-head">
+    <h2>Últimas publicaciones</h2>
+    <a href="{{ url_for('main.buscar') }}" class="link-arrow">Ver todo →</a>
+  </div>
+  <div class="product-grid">
+    {% for p in productos %}
+      {% include "products/_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% else %}
+<section class="empty-state">
+  <h2>Aún no hay productos publicados</h2>
+  <p>Sé el primero en compartir tecnología verificada en TecnoPlace.</p>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('products.crear') }}" class="btn btn-primary">Publicar el primero</a>
+  {% else %}
+    <a href="{{ url_for('auth.registro') }}" class="btn btn-primary">Crear cuenta</a>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

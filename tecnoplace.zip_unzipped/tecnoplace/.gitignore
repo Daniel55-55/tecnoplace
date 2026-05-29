@@ -1,0 +1,49 @@
+# Entornos Python
+venv/
+env/
+.venv/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribución / empaquetado
+.Python
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Variables de entorno
+.env
+.env.local
+
+# Base de datos local e instancia
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos subidos por usuarios
+app/static/uploads/*
+!app/static/uploads/.gitkeep
+app/static/secure/*
+!app/static/secure/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Cobertura
+.coverage
+htmlcov/
+.pytest_cache/

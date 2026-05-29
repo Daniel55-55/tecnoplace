@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#dcfce7"/>
+  <g transform="translate(200,140)" fill="#16a34a">
+    <circle r="36" fill="#16a34a" opacity="0.18"/>
+    <text x="0" y="14" text-anchor="middle" font-size="48">📦</text>
+  </g>
+  <text x="200" y="220" text-anchor="middle" font-family="system-ui, sans-serif"
+        font-size="16" fill="#166534" font-weight="600">Sin imagen</text>
+</svg>

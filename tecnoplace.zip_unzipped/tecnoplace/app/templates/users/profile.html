@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Mi cuenta{% endblock %}
+
+{% block content %}
+<div class="profile-header">
+  <div class="profile-avatar">{{ current_user.nombre[0]|upper }}</div>
+  <div>
+    <h1>{{ current_user.nombre }}</h1>
+    <p class="muted">{{ current_user.correo }}</p>
+    {% if current_user.verificado %}
+      <span class="badge badge-success">✓ Identidad verificada</span>
+    {% elif estado_verificacion == 'pendiente' %}
+      <span class="badge badge-warning">⏳ Verificación pendiente de revisión</span>
+    {% elif estado_verificacion == 'rechazado' %}
+      <span class="badge badge-danger">✗ Verificación rechazada</span>
+      <a href="{{ url_for('users.verificar') }}">Volver a intentar</a>
+    {% else %}
+      <span class="badge badge-warning">Sin verificar</span>
+      <a href="{{ url_for('users.verificar') }}">Verificar ahora →</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="profile-actions">
+  {% if current_user.verificado %}
+    <a href="{{ url_for('products.crear') }}" class="btn btn-primary">+ Publicar producto</a>
+  {% else %}
+    <a href="{{ url_for('users.verificar') }}" class="btn btn-primary">Verificar identidad</a>
+  {% endif %}
+</div>
+
+<section>
+  <h2>Mis productos publicados</h2>
+  {% if mis_productos %}
+    <div class="product-grid">
+      {% for p in mis_productos %}
+        {% include "products/_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state-soft">
+      <p>Aún no has publicado productos.</p>
+      {% if current_user.verificado %}
+        <a href="{{ url_for('products.crear') }}" class="btn btn-outline">Publicar el primero</a>
+      {% else %}
+        <p class="muted">Verifica tu identidad para empezar a publicar.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

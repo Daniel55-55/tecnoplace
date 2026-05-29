@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Catálogo{% endblock %}
+
+{% block content %}
+<div class="catalog-layout">
+  <aside class="filters">
+    <h2>Filtros</h2>
+    <form method="get" action="{{ url_for('main.buscar') }}">
+      <label>
+        Búsqueda
+        <input type="search" name="q" value="{{ q }}" placeholder="iPhone, MacBook…">
+      </label>
+
+      <label>
+        Categoría
+        <select name="categoria">
+          <option value="">Todas</option>
+          {% for c in all_categorias %}
+            <option value="{{ c.id }}" {% if cat_actual == c.id %}selected{% endif %}>{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>
+        Estado
+        <select name="estado">
+          <option value="">Cualquiera</option>
+          <option value="nuevo" {% if estado_actual == 'nuevo' %}selected{% endif %}>Nuevo</option>
+          <option value="usado" {% if estado_actual == 'usado' %}selected{% endif %}>Usado</option>
+        </select>
+      </label>
+
+      <div class="price-range">
+        <label>
+          Precio mín.
+          <input type="number" name="precio_min" min="0" value="{{ precio_min }}">
+        </label>
+        <label>
+          Precio máx.
+          <input type="number" name="precio_max" min="0" value="{{ precio_max }}">
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">Aplicar filtros</button>
+      <a href="{{ url_for('main.buscar') }}" class="link-reset">Limpiar</a>
+    </form>
+  </aside>
+
+  <section class="catalog-results">
+    <header class="catalog-head">
+      <h1>
+        {% if q %}Resultados para "{{ q }}"{% else %}Catálogo TecnoPlace{% endif %}
+      </h1>
+      <p class="muted">{{ paginacion.total }} producto(s) encontrado(s)</p>
+    </header>
+
+    {% if paginacion.items %}
+      <div class="product-grid">
+        {% for p in paginacion.items %}
+          {% include "products/_card.html" %}
+        {% endfor %}
+      </div>
+
+      {% if paginacion.pages > 1 %}
+        <nav class="paginacion" aria-label="Paginación">
+          {% if paginacion.has_prev %}
+            <a href="{{ url_for('main.buscar', q=q, categoria=cat_actual, estado=estado_actual, precio_min=precio_min, precio_max=precio_max, page=paginacion.prev_num) }}">‹ Anterior</a>
+          {% endif %}
+          <span>Página {{ paginacion.page }} de {{ paginacion.pages }}</span>
+          {% if paginacion.has_next %}
+            <a href="{{ url_for('main.buscar', q=q, categoria=cat_actual, estado=estado_actual, precio_min=precio_min, precio_max=precio_max, page=paginacion.next_num) }}">Siguiente ›</a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="empty-state">
+        <h2>No se encontraron productos</h2>
+        <p>Intenta ajustar los filtros o explora otras categorías.</p>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

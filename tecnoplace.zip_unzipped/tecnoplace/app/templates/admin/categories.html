@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Categorías{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin.dashboard') }}" class="link-back">← Volver al panel</a>
+<h1>Gestión de categorías</h1>
+
+<form method="post" class="inline-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="text" name="nombre" placeholder="Nueva categoría" required maxlength="80">
+  <button type="submit" class="btn btn-primary">+ Crear</button>
+</form>
+
+<table class="data-table">
+  <thead><tr><th>ID</th><th>Nombre</th><th>Productos</th><th>Acción</th></tr></thead>
+  <tbody>
+    {% for c in categorias %}
+      <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.productos.count() }}</td>
+        <td>
+          <form method="post" action="{{ url_for('admin.eliminar_categoria', cid=c.id) }}"
+                onsubmit="return confirm('¿Eliminar categoría?');" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

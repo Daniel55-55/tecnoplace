@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Gestión de usuarios{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('admin.dashboard') }}" class="link-back">← Volver al panel</a>
+<h1>Gestión de usuarios</h1>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th>
+      <th>Verificado</th><th>Estado</th><th>Registro</th><th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in usuarios %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.nombre }}</td>
+        <td>{{ u.correo }}</td>
+        <td>{{ u.rol }}</td>
+        <td>{{ '✓' if u.verificado else '—' }}</td>
+        <td>
+          {% if u.bloqueado %}
+            <span class="badge badge-danger">Bloqueado</span>
+          {% else %}
+            <span class="badge badge-success">Activo</span>
+          {% endif %}
+        </td>
+        <td>{{ u.fecha_registro.strftime('%d/%m/%Y') }}</td>
+        <td>
+          {% if not u.es_admin %}
+            <form method="post" action="{{ url_for('admin.bloquear_usuario', uid=u.id) }}" style="display:inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-sm {% if u.bloqueado %}btn-primary{% else %}btn-danger{% endif %}">
+                {{ 'Desbloquear' if u.bloqueado else 'Bloquear' }}
+              </button>
+            </form>
+          {% else %}
+            <span class="muted">—</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Acerca del proyecto{% endblock %}
+
+{% block content %}
+<article class="about">
+  <h1>Acerca de TecnoPlace</h1>
+  <p class="lead">
+    TecnoPlace es una plataforma segura para la compra y venta de dispositivos tecnológicos
+    con validación de identidad de usuarios y arquitectura modular, desarrollada en el marco
+    del curso de <strong>Arquitectura de Software</strong> de UNIMINUTO.
+  </p>
+
+  <section>
+    <h2>Arquitectura</h2>
+    <p>
+      Cliente-Servidor bajo patrón <strong>MVC</strong>, con cuatro capas: presentación
+      (HTML/CSS/JS), controladores (Flask Blueprints), servicios (lógica de negocio)
+      y persistencia (SQLAlchemy + SQLite).
+    </p>
+  </section>
+
+  <section>
+    <h2>Stack tecnológico</h2>
+    <ul class="tech-list">
+      <li><strong>Backend:</strong> Python 3.11 + Flask + Jinja2</li>
+      <li><strong>Base de datos:</strong> SQLite (migrable a PostgreSQL)</li>
+      <li><strong>Seguridad:</strong> bcrypt para hash de contraseñas, Flask-WTF para CSRF</li>
+      <li><strong>Multimedia:</strong> Pillow para procesar imágenes</li>
+      <li><strong>Frontend:</strong> HTML5, CSS3 (paleta verde), JavaScript vanilla</li>
+      <li><strong>Despliegue sugerido:</strong> Gunicorn + Nginx en Ubuntu</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Decisión arquitectónica clave</h2>
+    <p>
+      <strong>Ningún usuario puede publicar productos sin haber sido verificado.</strong>
+      Esto se modela en UML con el caso de uso <code>«Subir foto cédula y selfie»</code>
+      con relación <code>«include»</code> hacia <code>«Validar identidad»</code>.
+    </p>
+  </section>
+
+  <section>
+    <h2>Autor</h2>
+    <p>
+      Daniel Alejandro Garcia · ID 863128 ·
+      Profesor: Diego Alexander Aguirre Forero · NRC 85024
+    </p>
+  </section>
+</article>
+{% endblock %}

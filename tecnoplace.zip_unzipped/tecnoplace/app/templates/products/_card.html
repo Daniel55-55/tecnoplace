@@ -1,0 +1,15 @@
+<article class="product-card">
+  <a href="{{ url_for('products.detalle', producto_id=p.id) }}" class="card-img-link">
+    <img src="{{ url_for('static', filename=p.imagen_principal) }}" alt="{{ p.titulo }}" loading="lazy">
+    <span class="badge-estado badge-{{ p.estado }}">{{ p.estado|capitalize }}</span>
+  </a>
+  <div class="card-body">
+    <h3><a href="{{ url_for('products.detalle', producto_id=p.id) }}">{{ p.titulo }}</a></h3>
+    <p class="cat">{{ p.categoria.nombre }}</p>
+    <p class="price">${{ "{:,.0f}".format(p.precio) }}</p>
+    <p class="vendor">
+      <span class="verified" title="Vendedor verificado">✓</span>
+      {{ p.propietario.nombre.split()[0] }}
+    </p>
+  </div>
+</article>

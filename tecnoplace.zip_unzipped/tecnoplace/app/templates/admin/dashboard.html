@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Panel de administración{% endblock %}
+
+{% block content %}
+<h1>Panel de administración</h1>
+<p class="muted">Métricas en tiempo real y acceso a moderación.</p>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-num">{{ stats.usuarios }}</span>
+    <span class="stat-label">Usuarios totales</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num">{{ stats.verificados }}</span>
+    <span class="stat-label">Verificados</span>
+  </div>
+  <div class="stat-card highlight">
+    <span class="stat-num">{{ stats.pendientes }}</span>
+    <span class="stat-label">Pendientes de verificar</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num">{{ stats.productos }}</span>
+    <span class="stat-label">Productos publicados</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num">{{ stats.categorias }}</span>
+    <span class="stat-label">Categorías</span>
+  </div>
+</div>
+
+<div class="admin-quick-actions">
+  <a href="{{ url_for('admin.validaciones') }}" class="quick-card">
+    <span class="qa-icon">🛡️</span>
+    <strong>Validaciones pendientes</strong>
+    <span class="muted">Aprobar o rechazar identidades</span>
+  </a>
+  <a href="{{ url_for('admin.usuarios') }}" class="quick-card">
+    <span class="qa-icon">👥</span>
+    <strong>Gestión de usuarios</strong>
+    <span class="muted">Bloquear o desbloquear cuentas</span>
+  </a>
+  <a href="{{ url_for('admin.categorias') }}" class="quick-card">
+    <span class="qa-icon">🗂️</span>
+    <strong>Categorías</strong>
+    <span class="muted">Crear y eliminar categorías</span>
+  </a>
+</div>
+
+<section>
+  <h2>Bitácora reciente (log_auditoria)</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Fecha</th><th>Acción</th><th>Tabla</th><th>Registro ID</th><th>Usuario</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+          <td><code>{{ log.accion }}</code></td>
+          <td>{{ log.tabla_afectada }}</td>
+          <td>{{ log.registro_id }}</td>
+          <td>{{ log.usuario.correo if log.usuario else '—' }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" class="muted">Sin registros aún.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h1>Iniciar sesión</h1>
+    <p class="muted">Bienvenido de vuelta a TecnoPlace.</p>
+
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label>Correo electrónico
+        <input type="email" name="correo" required autocomplete="email">
+      </label>
+
+      <label>Contraseña
+        <input type="password" name="password" required autocomplete="current-password">
+      </label>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg">Ingresar</button>
+    </form>
+
+    <p class="auth-foot">
+      ¿No tienes cuenta? <a href="{{ url_for('auth.registro') }}">Regístrate aquí</a>
+    </p>
+  </div>
+
+  <aside class="auth-side">
+    <h2>🔒 Cuenta administradora de prueba</h2>
+    <p>Para revisar el panel de moderación:</p>
+    <code>admin@tecnoplace.com</code><br>
+    <code>Admin123!</code>
+    <p class="small muted">Esta cuenta se crea automáticamente al inicializar la base de datos.</p>
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{% if producto %}Editar{% else %}Publicar{% endif %} producto{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+  <h1>{% if producto %}Editar producto{% else %}Publicar nuevo producto{% endif %}</h1>
+  <p class="muted">Llena los datos de tu dispositivo. Recuerda: las imágenes claras venden más.</p>
+
+  <form method="post" enctype="multipart/form-data" class="form-card">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <label>
+      Título *
+      <input type="text" name="titulo" required maxlength="150"
+             value="{{ producto.titulo if producto else '' }}"
+             placeholder="Ej: iPhone 14 Pro 256GB color negro">
+    </label>
+
+    <label>
+      Descripción
+      <textarea name="descripcion" rows="5" placeholder="Estado, accesorios incluidos, motivo de venta…">{{ producto.descripcion if producto else '' }}</textarea>
+    </label>
+
+    <div class="form-row">
+      <label>
+        Precio (COP) *
+        <input type="number" name="precio" min="1" step="1" required
+               value="{{ producto.precio|int if producto else '' }}">
+      </label>
+
+      <label>
+        Estado *
+        <select name="estado" required>
+          <option value="nuevo" {% if producto and producto.estado == 'nuevo' %}selected{% endif %}>Nuevo</option>
+          <option value="usado" {% if not producto or producto.estado == 'usado' %}selected{% endif %}>Usado</option>
+        </select>
+      </label>
+
+      <label>
+        Categoría *
+        <select name="id_categoria" required>
+          <option value="">— Seleccionar —</option>
+          {% for c in categorias %}
+            <option value="{{ c.id }}" {% if producto and producto.id_categoria == c.id %}selected{% endif %}>{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+
+    <label>
+      Imágenes (puedes subir varias)
+      <input type="file" name="imagenes" accept="image/png,image/jpeg,image/webp" multiple>
+      <small class="muted">Formatos: JPG, PNG, WEBP. Máx 8 MB por archivo.</small>
+    </label>
+
+    {% if producto and producto.imagenes %}
+      <div class="existing-images">
+        <p>Imágenes actuales:</p>
+        <div class="thumb-strip">
+          {% for img in producto.imagenes %}
+            <img src="{{ url_for('static', filename=img.url) }}" alt="">
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary btn-lg">
+        {% if producto %}Guardar cambios{% else %}Publicar producto{% endif %}
+      </button>
+      <a href="{{ url_for('users.perfil') if producto else url_for('main.index') }}" class="btn btn-outline">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

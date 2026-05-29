@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h1>Crear cuenta</h1>
+    <p class="muted">Únete a TecnoPlace y compra/vende tecnología con confianza.</p>
+
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label>Nombre completo *
+        <input type="text" name="nombre" required maxlength="120">
+      </label>
+
+      <label>Correo electrónico *
+        <input type="email" name="correo" required maxlength="120">
+      </label>
+
+      <div class="form-row">
+        <label>Teléfono
+          <input type="tel" name="telefono" maxlength="20">
+        </label>
+
+        <label>Documento de identidad
+          <input type="text" name="documento" maxlength="50">
+        </label>
+      </div>
+
+      <label>Contraseña *
+        <input type="password" name="password" required minlength="8">
+        <small class="muted">Mínimo 8 caracteres.</small>
+      </label>
+
+      <label>Confirmar contraseña *
+        <input type="password" name="password2" required minlength="8">
+      </label>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg">Crear cuenta</button>
+    </form>
+
+    <p class="auth-foot">
+      ¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}">Inicia sesión</a>
+    </p>
+  </div>
+
+  <aside class="auth-side">
+    <h2>¿Por qué registrarte?</h2>
+    <ul class="check-list">
+      <li>Acceso al catálogo verificado</li>
+      <li>Publicación de productos tras validar tu identidad</li>
+      <li>Contraseña cifrada con bcrypt</li>
+      <li>Comunicación auditable con vendedores</li>
+    </ul>
+  </aside>
+</div>
+{% endblock %}

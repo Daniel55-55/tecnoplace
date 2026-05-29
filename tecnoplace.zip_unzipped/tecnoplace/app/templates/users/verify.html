@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Verificar identidad{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+  <h1>🛡️ Verificación de identidad</h1>
+  <p class="lead">
+    Para garantizar la confianza en TecnoPlace, todos los usuarios deben verificar su identidad
+    antes de publicar productos. Sube una foto de tu documento y una selfie sosteniéndolo.
+  </p>
+
+  {% if estado == 'pendiente' %}
+    <div class="alert alert-info">
+      ⏳ Ya enviaste tus documentos. Un administrador los revisará en menos de 48 horas.
+      Si quieres, puedes enviar archivos nuevos a continuación.
+    </div>
+  {% elif estado == 'rechazado' %}
+    <div class="alert alert-danger">
+      ✗ Tu verificación anterior fue rechazada. Por favor, sube nuevamente las imágenes
+      asegurándote de que sean claras y legibles.
+    </div>
+  {% endif %}
+
+  <ol class="steps">
+    <li>Toma una foto de tu cédula <strong>por el frente</strong>, con buena luz.</li>
+    <li>Toma una <strong>selfie</strong> sosteniendo tu cédula al lado de tu rostro.</li>
+    <li>Sube ambas imágenes y espera la aprobación.</li>
+  </ol>
+
+  <form method="post" enctype="multipart/form-data" class="form-card">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <label>
+      Foto del documento de identidad *
+      <input type="file" name="foto_documento" accept="image/jpeg,image/png,image/webp" required>
+    </label>
+
+    <label>
+      Selfie sosteniendo el documento *
+      <input type="file" name="selfie" accept="image/jpeg,image/png,image/webp" required>
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary btn-lg">Enviar verificación</button>
+      <a href="{{ url_for('users.perfil') }}" class="btn btn-outline">Cancelar</a>
+    </div>
+  </form>
+
+  <aside class="privacy-note">
+    <h3>🔐 Privacidad de tus documentos</h3>
+    <p>Tus archivos se almacenan en una carpeta privada del servidor (<code>/secure</code>),
+    separada de las imágenes públicas de productos. Solo el equipo administrador autorizado
+    puede revisarlos para fines de verificación.</p>
+  </aside>
+</div>
+{% endblock %}
