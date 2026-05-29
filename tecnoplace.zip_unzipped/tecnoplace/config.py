@@ -14,10 +14,10 @@ class Config:
     WTF_CSRF_TIME_LIMIT = 3600
 
     # Base de datos
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL",
-        f"sqlite:///{BASE_DIR / 'instance' / 'tecnoplace.db'}"
-    )
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+    "DATABASE_URL",
+    "sqlite:///tecnoplace.db"
+)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Archivos
